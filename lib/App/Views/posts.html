@@ -2,7 +2,7 @@
 [% INCLUDE header.html %]
 <body>
 <div class="form">
-        <form id="file_upload" action="posts" method="POST" enctype="multipart/form-data">
+        <form id="file_upload" action="/[% board %]/[% topic_id %]" method="POST" enctype="multipart/form-data">
             <div><input type="file" name="filepic"></div>
             <div><textarea name="msg" cols="80" rows="6"></textarea></div>
             <div><button>upload</button></div>
@@ -11,7 +11,7 @@
         [% FOREACH post IN posts %]
         <div class="post"> <div class="post-wrapper"> <div class="post_info" >[% post.id %]  [% post.date %] </div>
             [% IF post.img_path %]
-                <div class="img"> <a target="_blank" href="img/[% post.img_path %]"> <img src="img/[% post.pre_img_path %]"> </a> </div>
+                <div class="img"> <a target="_blank" href="/img/[% post.img_path %]"> <img src="/img/[% post.pre_img_path %]"> </a> </div>
             [% END %]
             <div class="msg"> [% post.message %] </div> </div> </div>
         [% END %]

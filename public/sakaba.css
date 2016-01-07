@@ -9,14 +9,23 @@ div.post {
 }
 
 div.op_post-wrapper {
-    border: 1px solid #cccccc;
-    border-radius: 1px;
     max-width: 600px;
-    min-height: 250px;
+    min-height: 230px;
     padding: 1px 3px 3px;
     margin: 4px 0;
 }
 
+
+div.op_post {
+    border: 1px solid #cccccc;
+    border-radius: 1px;
+    max-width: 600px;
+}
+
+div.open_topic {
+    padding: 1px 3px 3px;
+    margin: 4px;
+}
 
 * {
     box-sizing: border-box;

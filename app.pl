@@ -9,27 +9,16 @@ use App::Controllers::MainController;
 use Plack::Builder;
 use Plack::Middleware::Static;
 use Plack::Middleware::Debug;
+use Plack::App::Path::Router::PSGI;
+
+my $router = $MainController::router;
 
 
-my %ROUTING = %MainController::PATHES;
 
-#use Data::Dumper;
-#print Dumper(%ROUTING);
 
-    my $app = sub {
-        my $env = shift;
-     
-        my $request = Plack::Request->new($env);
-        my $route = $ROUTING{$request->path_info};
-        if ($route) {
-            return $route->($env);
-        }
-        return [
-            '404',
-            [ 'Content-Type' => 'text/html' ],
-            [ '404 Not Found' ],
-        ];
-    };
+my $app = Plack::App::Path::Router::PSGI->new( router => $router );
+
+
 
 builder {
         enable 'Debug', panels =>

@@ -20,8 +20,9 @@ sub init_schema {
 }
 
 sub get_posts {
+    my $topic_id = shift;
     my $db = init_schema();
-    my $result = $db->resultset('Message')->search(); 
+    my $result = $db->resultset('Message')->search({topic_id => $topic_id}); 
     my $tmp_arr = extract_posts($result);
     return $tmp_arr;
     }
@@ -88,8 +89,9 @@ sub get_topics {
     }
 
 sub get_topics_w_posts {
+    my $board = shift;
     my @topics_posts;
-    my %hash = get_topics("b");
+    my %hash = get_topics($board);
     use Data::Dumper;
     #print Dumper(\%hash);
     for my $topic_id (keys %hash) {
@@ -126,9 +128,10 @@ sub create_post {
 
 
 sub create_topic {
+    my $board = shift;
     my $db = init_schema();
     my $request = $db->resultset('Topic')->create({
-        dest => 'b',},
+        dest => $board,},
         );
     return $request->{_column_data}->{id}
 }
@@ -148,7 +151,8 @@ sub create_topic_w_posts {
     my $msg = shift;
     my $img_path = shift;
     my $pre_img_path = shift;
-    my $topic_id = create_topic();
+    my $board = shift;
+    my $topic_id = create_topic($board);
     my $op_id = create_post($msg, $img_path, $pre_img_path, $topic_id);
     update_topic_op_id($topic_id, $op_id);
 
