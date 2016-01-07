@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use FindBin;
 use lib "$FindBin::Bin/../../";
-
+use utf8;
 use App::Models::Schema;
 use App::Config::Core;
 
@@ -14,6 +14,7 @@ sub init_schema {
         $dbconfig->db_pref, $dbconfig->db_user, $dbconfig->db_pass, {
             quote_names => 1,
             mysql_enable_utf8 => 1,
+            on_connect_do     => [ 'SET NAMES utf8', ],
         });
     return $schema;
 
