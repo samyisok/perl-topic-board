@@ -9,11 +9,7 @@
         </form>
         </div>
         [% FOREACH post IN posts %]
-        <div class="post"> <div class="post-wrapper"> <div class="post_info" >[% post.id %]  [% post.date %] </div>
-            [% IF post.img_path %]
-                <div class="img"> <a target="_blank" href="/img/[% post.img_path %]"> <img src="/img/[% post.pre_img_path %]"> </a> </div>
-            [% END %]
-            <div class="msg"> [% post.message %] </div> </div> </div>
+                         [% INCLUDE template_post.html post %]
         [% END %]
     </body>
 </html>

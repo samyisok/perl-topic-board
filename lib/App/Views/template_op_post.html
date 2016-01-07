@@ -1,0 +1,17 @@
+    <div class="topic">
+        <div class="op_post">
+             <div class="op_post-wrapper">
+                 <div class="post-wrapper">
+                     <div class="post_info" ><span>[% topic.op_post.id %]  [% topic.op_post.date %] DATA_DATA_DATA_DATA </span></div>
+                     [% IF topic.op_post.img_path %]
+                    <div class="img"> 
+                        <a target="_blank" href="/img/[% topic.op_post.img_path %]">
+                        <img src="/img/[% topic.op_post.pre_img_path %]"> </a>
+                    </div>
+                    [% END %]
+                    <blockquote> [% topic.op_post.message %] </blockquote>
+           </div>
+        </div>
+           <div class="open_topic"><span><a target="_blank" href="/[% board.id %]/[% topic.topic_id %]">Click Here</a> to view topic.</span></div>
+      </div>
+

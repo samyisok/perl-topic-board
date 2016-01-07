@@ -2,29 +2,32 @@ div.post {
     background: #dddddd none repeat scroll 0 0;
     border: 1px solid #cccccc;
     border-radius: 2px;
-    max-width: 600px;
-    min-height: 250px;
+    max-width: 900px;
     padding: 1px 3px 3px;
     margin: 4px 0;
+    display: table
 }
 
 div.op_post-wrapper {
-    max-width: 600px;
-    min-height: 230px;
+    max-width: 900px;
     padding: 1px 3px 3px;
     margin: 4px 0;
+    display: table
 }
 
 
 div.op_post {
     border: 1px solid #cccccc;
     border-radius: 1px;
+    margin: 4px 0;
     max-width: 600px;
+    display: table
 }
 
 div.open_topic {
     padding: 1px 3px 3px;
     margin: 4px;
+    display: table
 }
 
 * {
@@ -37,7 +40,8 @@ div.img {
     overflow: hidden;
 }
 
-div.msg {
+blockquote {
+    display: block;
 }
 
 div.post-wrapper {

@@ -13,34 +13,15 @@
         </div>
 
     <br>
-    <!-- OP POST START -->
 
-    [% FOREACH topic IN topics %] 
-    <div class="topic">
-        <div class="op_post">
-             <div class="op_post-wrapper">
-                 <div class="post-wrapper">
-                    <div class="post_info" >[% topic.op_post.id %]  [% topic.op_post.date %] </div>
-                    [% IF topic.op_post.img_path %]
-                    <div class="img"> 
-                        <a target="_blank" href="/img/[% topic.op_post.img_path %]">
-                        <img src="/img/[% topic.op_post.pre_img_path %]"> </a>
-                    </div>
-                    [% END %]
-            <div class="msg"> [% topic.op_post.message %] </div>
-           </div>
-        </div>
-           <div class="open_topic"><span><a target="_blank" href="/[% board.id %]/[% topic.topic_id %]">Click Here</a> to view topic.</span></div>
-      </div>
+    [% FOREACH topic IN topics %]
+    <!-- OP POST START -->
+        [% INCLUDE template_op_post.html topic %]
     <!-- OP POST END -->
-    [% IF topic.list_of_posts %]
-        [% FOREACH post IN topic.list_of_posts %]
-             <div class="post"> <div class="post-wrapper"> <div class="post_info" >[% post.id %]  [% post.date %] </div>
-            [% IF post.img_path %]
-                <div class="img"> <a target="_blank" href="/img/[% post.img_path %]"> <img src="/img/[% post.pre_img_path %]"> </a> </div>
-            [% END %]
-            <div class="msg"> [% post.message %] </div> </div> </div>
-        [% END %] 
-     [% END %]
+            [% IF topic.list_of_posts %]
+                [% FOREACH post IN topic.list_of_posts %]
+                    [% INCLUDE template_post.html post %]
+                [% END %] 
+             [% END %]
    </div>
    [% END %]
