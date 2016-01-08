@@ -79,35 +79,46 @@ sub get_topics {
     my $db = init_schema();
     my $dest = shift;
     my $result = $db->resultset('Topic')->search({
-        dest => $dest,
-        });
-    #$result->result_class('DBIx::Class::ResultClass::HashRefInflator');
-    my %hash_of_topic_id;
+            dest => $dest,
+        },
+        {
+            order_by => { -desc => 'date' },
+        },
+        );
+    my @array_hash_of_topic_id;
     for my $string ($result->all){
-        $hash_of_topic_id{$string->id} = $string->op_post_id;
+       push(@array_hash_of_topic_id,
+           {     topic_id => $string->id,
+               op_post_id => $string->op_post_id, } );
     }
-    return %hash_of_topic_id;
+    return @array_hash_of_topic_id;
     }
 
 sub get_topics_w_posts {
     my $board = shift;
     my @topics_posts;
-    my %hash = get_topics($board);
-    use Data::Dumper;
-    #print Dumper(\%hash);
-    for my $topic_id (keys %hash) {
+    my @array_of_topics = get_topics($board);
+    for my $topic (@array_of_topics) {
+           my %hash = %{$topic};
+           my $topic_id = $hash{'topic_id'};
+           my $op_post_id = $hash{'op_post_id'};
            my $anon = { 
                topic_id => $topic_id,
-               op_post => get_op_post($hash{$topic_id}),
-               list_of_posts => get_topic_last_tree_posts($topic_id, $hash{$topic_id}),
+               op_post => get_op_post($op_post_id),
+               list_of_posts => get_topic_last_tree_posts($topic_id, $op_post_id),
             };
-            #    print Dumper($anon);
         push(@topics_posts, $anon);
     }
-    #print Dumper(\@topics_posts);
     return \@topics_posts;
 }
 
+sub update_topic_date {
+    my $topic_id = shift;
+    my $db = init_schema();
+    my $topic_post = $db->resultset('Topic')->find($topic_id);
+    $topic_post->date(\'NOW()');
+    $topic_post->update;
+}
 
 sub create_post {
     my $db = init_schema();
@@ -123,6 +134,7 @@ sub create_post {
             topic_id => $topic_id,
         },
         );
+    update_topic_date($topic_id);
     return $request->{_column_data}->{id}
 }
 

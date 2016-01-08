@@ -41,6 +41,12 @@ __PACKAGE__->table("topics");
   is_foreign_key: 1
   is_nullable: 1
 
+=head2 date
+
+  data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -50,6 +56,12 @@ __PACKAGE__->add_columns(
   { data_type => "char", is_nullable => 1, size => 11 },
   "op_post_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "date",
+  {
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -102,8 +114,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-05 17:51:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:N5N7s4EMUe9kpydK/3+8lg
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-08 11:54:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CDEyBU3lS2PHg/vY5/3Pvg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
