@@ -6,6 +6,7 @@ use lib "$FindBin::Bin/../../";
 use utf8;
 use App::Models::Schema;
 use App::Config::Core;
+use App::Core::Parser;
 
 
 sub init_schema {
@@ -126,6 +127,7 @@ sub create_post {
     my $img_path = shift;
     my $pre_img_path = shift;
     my $topic_id = shift;
+    $msg = App::Core::Parser::bbcode($msg);
     my $request = $db->resultset('Message')->create({
             message => $msg,
             img_path => $img_path,

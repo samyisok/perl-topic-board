@@ -24,6 +24,11 @@ div.op_post {
     display: table
 }
 
+
+span.spoiler {
+    color: black;
+    background-color: black;
+}
 div.open_topic {
     padding: 1px 3px 3px;
     margin: 4px;
