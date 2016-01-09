@@ -48,17 +48,32 @@ sub save_file {
     return ($file_name, $pre_file_name);
 }
 
+
 sub create_preview {
     my $file_path = shift;
     my $dest_path =  shift;
     use Image::Magick;
     my $img = Image::Magick->new();
     my $tmp;
+    my $max_size = 250;
     $tmp = $img->Read($file_path);
-    $tmp = $img->AdaptiveResize(200);
-    $tmp = $img->write($dest_path);
+    my ($w, $h) = $img->Get('width', 'height');
+    if ($w > $max_size or $h > $max_size){
+		if ($w > $h) {
+			my $wpersent = ($max_size / $w);
+			my $hsize = $h * $wpersent;
+			$tmp = $img->Resize(width=>$max_size, height => $hsize, blur => 1);
+		}
+		else {
+			my $hpersent = ($max_size / $h);
+			my $wsize = $w * $hpersent;
+			$tmp = $img->Resize(width=>$wsize, height => $max_size, blur => 1);
+		}
+    }
+	$tmp = $img->write($dest_path);
 
 }
+
 
 sub generate_name {
     my $file_path = shift;
