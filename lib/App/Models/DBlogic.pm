@@ -90,7 +90,10 @@ sub get_topics {
     for my $string ($result->all){
        push(@array_hash_of_topic_id,
            {     topic_id => $string->id,
-               op_post_id => $string->op_post_id, } );
+               op_post_id => $string->op_post_id,
+               count_pics => $string->count_pics,
+              count_posts => $string->count_posts,
+           } );
     }
     return @array_hash_of_topic_id;
     }
@@ -103,10 +106,14 @@ sub get_topics_w_posts {
            my %hash = %{$topic};
            my $topic_id = $hash{'topic_id'};
            my $op_post_id = $hash{'op_post_id'};
+           my $count_posts = $hash{'count_posts'};
+           my $count_pics = $hash{'count_pics'};
            my $anon = { 
                topic_id => $topic_id,
                op_post => get_op_post($op_post_id),
                list_of_posts => get_topic_last_tree_posts($topic_id, $op_post_id),
+               count_posts => $count_posts,
+               count_pics => $count_pics,
             };
         push(@topics_posts, $anon);
     }
@@ -137,6 +144,7 @@ sub create_post {
         },
         );
     update_topic_date($topic_id);
+    update_topic_count($topic_id, $img_path);
     return $request->{_column_data}->{id}
 }
 
@@ -146,8 +154,10 @@ sub create_topic {
     my $board = shift;
     my $db = init_schema();
     my $request = $db->resultset('Topic')->create({
-        dest => $board,},
-        );
+        dest => $board,
+        count_pics => 0,
+        count_posts => 0,
+        },);
     return $request->{_column_data}->{id}
 }
 
@@ -161,6 +171,23 @@ sub update_topic_op_id {
 
 }
 
+sub update_topic_count {
+    my $db = init_schema();
+    my $topic_id = shift;
+    my $img = shift;
+    my $topic_post = $db->resultset('Topic')->find($topic_id);
+    if(!$img) {
+        $topic_post->update({
+            count_posts => \'count_posts + 1',
+            });
+    }
+    else {
+        $topic_post->update({
+            count_posts => \'count_posts + 1',
+            count_pics => \'count_pics + 1',
+            });
+    }
+}
 
 sub create_topic_w_posts {
     my $msg = shift;

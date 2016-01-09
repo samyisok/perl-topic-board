@@ -12,6 +12,7 @@
                     <blockquote> [% topic.op_post.message %] </blockquote>
            </div>
         </div>
-           <div class="open_topic"><span><a target="_blank" href="/[% board.id %]/[% topic.topic_id %]">Click Here</a> to view topic.</span></div>
+           <div class="open_topic"><span class=topic_post>
+                   [% IF topic.count_posts >= 4 %][% topic.count_posts %] replies [% END %] [% IF topic.count_pics >= 4 %] and [% topic.count_pics %] images omitted. [% END %] <a target="_blank" href="/[% board.id %]/[% topic.topic_id %]">Click Here</a> to view.</span></div>
       </div>
 

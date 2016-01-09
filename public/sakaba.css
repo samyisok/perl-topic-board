@@ -29,6 +29,12 @@ span.spoiler {
     color: black;
     background-color: black;
 }
+
+span.topic_post{
+    font-size: 0.9em;
+    color: #707070;
+}
+
 div.open_topic {
     padding: 1px 3px 3px;
     margin: 4px;
