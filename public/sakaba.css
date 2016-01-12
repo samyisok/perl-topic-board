@@ -15,12 +15,16 @@ div.op_post-wrapper {
     display: table
 }
 
+.hiclass {
+    !important;
+    background: #eedacb none repeat scroll 0 0;
+}
 
 div.op_post {
     border: 1px solid #cccccc;
     border-radius: 1px;
     margin: 4px 0;
-    max-width: 600px;
+    max-width: 900px;
     display: table
 }
 

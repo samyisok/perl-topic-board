@@ -1,6 +1,6 @@
-<div class="post">
+<div class="post" id="post-[% post.id %]" >
     <div class="post-wrapper">
-        <div class="post_info" >[% post.id %]  [% post.date %] <span> DATA_DATA_DATA_DATA </span> </div>
+        <div class="post_info" ><a href="javascript:insert('>>[% post.id %]')">№[% post.id %]</a>  [% post.date %] <span> DATA_DATA_DATA_DATA </span> </div>
             [% IF post.img_path %]
                 <div class="img"> <a target="_blank" href="/img/[% post.img_path %]"> <img src="/img/[% post.pre_img_path %]"> </a> </div>
             [% END %]
