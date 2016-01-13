@@ -25,6 +25,7 @@ function insert(text)
 
 function focuspost(id){
     var postwrap = $("#post-"+id);
+    $(".hiclass").removeClass("hiclass");
     postwrap.addClass("hiclass");
     $(window).scrollTop(postwrap.offset().top);
     postwrap.focus();
