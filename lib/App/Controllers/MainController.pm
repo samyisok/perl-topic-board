@@ -50,7 +50,8 @@ sub get_posts {
    }
    #GET request     
    else {
-       my $result = App::Models::DBlogic::get_posts($topic_id); 
+       my $result = App::Models::DBlogic::get_posts($topic_id);
+       return get_error if $result;
        return App::Core::Render::render_template('posts.html', {posts => $result, topic_id => $topic_id, board => $board});
    }
 }
