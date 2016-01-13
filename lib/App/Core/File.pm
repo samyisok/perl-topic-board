@@ -11,7 +11,6 @@ sub get_file_info {
     my $tempname = $file_hash->{'tempname'};
     my $file_size = $file_hash->{'size'};
     my $content_type = $file_hash->{'headers'}->{'content-type'};
-    #print "OK CHECKFILE\n" if check_file($file_size,$content_type);   
     return ($tempname, $content_type) if check_file($file_size,$content_type);   
 }
 

@@ -66,10 +66,6 @@ sub get_save_prefix {
 }
 sub get_file_type {
     my $self = shift;
-    use Data::Dumper;
-    #print "DDDDDDDDDDDDDDDD";
-    #print Dumper( qw(image/jpeg image/png image/gif) );
-    #print Dumper($self->{file_type});
     return $self->{file_type};
 }
 

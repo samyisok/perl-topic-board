@@ -14,12 +14,6 @@ use Plack::App::Path::Router::PSGI;
 use Path::Router;
 use utf8;
 
-#our %PATHES = (
-#        '/posts' => \&get_posts,
-#        '/b' => \&get_topic_b,
-#        '/err' => \&get_error,
-#);
-
 BEGIN {
     our $router = Path::Router->new();
 
@@ -51,8 +45,6 @@ sub get_posts {
    #GET request     
    else {
        my $result = App::Models::DBlogic::get_posts($topic_id);
-       use Data::Dumper;
-       print Dumper(\$result);
        return get_error unless @{$result};
        return App::Core::Render::render_template('posts.html', {posts => $result, topic_id => $topic_id, board => $board});
    }
@@ -86,8 +78,6 @@ sub get_topic_b {
     }
     else {
             my $result = App::Models::DBlogic::get_topics_w_posts($board);
-            use Data::Dumper;
-            print Dumper(\$result);
             return App::Core::Render::render_template('topics.html', {topics => $result, board => { id => $board }});
     }
 }
