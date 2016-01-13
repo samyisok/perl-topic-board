@@ -51,7 +51,9 @@ sub get_posts {
    #GET request     
    else {
        my $result = App::Models::DBlogic::get_posts($topic_id);
-       return get_error if $result;
+       use Data::Dumper;
+       print Dumper(\$result);
+       return get_error unless @{$result};
        return App::Core::Render::render_template('posts.html', {posts => $result, topic_id => $topic_id, board => $board});
    }
 }
