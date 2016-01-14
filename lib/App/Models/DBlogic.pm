@@ -200,4 +200,33 @@ sub create_topic_w_posts {
 
 }
 
+
+sub get_list_topics {
+    my $db = init_schema();
+    my $topic_list = $db->resultset('Topic')->search(undef, {
+        columns => [qw/ dest /],
+        });
+    my %result_hash;
+    for my $string ($topic_list->all){
+        if (exists $result_hash{$string->dest}){
+            $result_hash{$string->dest}++;
+        }
+        else {
+            $result_hash{$string->dest} = 1;
+        }
+    }
+    my @sorted_result_array;
+    for my $key (sort(keys %result_hash)){
+        push(@sorted_result_array, 
+            {$key => $result_hash{$key}}
+        );
+
+    }
+    return \@sorted_result_array;
+}
+
+
+
+
+
 1;

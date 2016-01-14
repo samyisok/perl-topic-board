@@ -20,9 +20,16 @@ BEGIN {
     $router->add_route('/:board/:topic_id'=> target => \&get_posts );
     $router->add_route('/:board' => target => \&get_topic_b );
     $router->add_route('/err' => target => \&get_error );
+    $router->add_route('/' => target => \&get_main_page );
 }
 
+sub get_index{
+       return App::Models::DBlogic::get_list_topics();
+}
 
+sub get_main_page {
+       return App::Core::Render::render_template('main_page.html', {index=>get_index()});
+}
 
 sub get_posts {
    my $env = shift;
@@ -46,7 +53,7 @@ sub get_posts {
    else {
        my $result = App::Models::DBlogic::get_posts($topic_id);
        return get_error unless @{$result};
-       return App::Core::Render::render_template('posts.html', {posts => $result, topic_id => $topic_id, board => $board});
+       return App::Core::Render::render_template('posts.html', {posts => $result, topic_id => $topic_id, board => $board, index=>get_index()});
    }
 }
 
@@ -78,7 +85,7 @@ sub get_topic_b {
     }
     else {
             my $result = App::Models::DBlogic::get_topics_w_posts($board);
-            return App::Core::Render::render_template('topics.html', {topics => $result, board => { id => $board }});
+            return App::Core::Render::render_template('topics.html', {topics => $result, index=>get_index() , board => { id => $board }});
     }
 }
 

@@ -1,0 +1,7 @@
+<div class="index">
+[% FOREACH hash IN index %]
+    [%FOREACH key IN hash.keys%]
+    <span class="boards_index"><a href=/[% key %]>[% key %][<span class="count_boards">[% hash.$key %]</span>]</a></span>
+    [% END %]
+[% END %]
+</div>

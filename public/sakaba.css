@@ -20,6 +20,13 @@ div.op_post-wrapper {
     background: #eedacb none repeat scroll 0 0;
 }
 
+.count_boards {
+    font-size: 1.1em;
+    color: green;
+}
+
+
+
 div.op_post {
     border: 1px solid #cccccc;
     border-radius: 1px;
