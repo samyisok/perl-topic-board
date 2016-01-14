@@ -32,7 +32,7 @@ sub get_posts {
 sub get_op_post {
     my $op_id = shift;
     my $db = init_schema();
-    my $result = $db->resultset('Message')->search( id => $op_id); 
+    my $result = $db->resultset('Message')->search({ id => $op_id }); 
     my $tmp_arr = extract_posts($result);
     return $tmp_arr->[0];
 }
