@@ -25,7 +25,11 @@ div.op_post-wrapper {
     color: green;
 }
 
-
+a {
+    color: #ff6600;
+    cursor: pointer;
+    font-size: 100%;
+}
 
 div.op_post {
     border: 1px solid #cccccc;
