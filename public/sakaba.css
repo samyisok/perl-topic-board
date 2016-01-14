@@ -25,6 +25,16 @@ div.op_post-wrapper {
     color: green;
 }
 
+em.ref_answer{
+    font-size: 75%;
+}
+
+a.ref_answer{
+    font-size: 75%;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
 a {
     color: #ff6600;
     cursor: pointer;

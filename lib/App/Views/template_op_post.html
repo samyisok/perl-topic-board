@@ -12,6 +12,18 @@
                     <blockquote> [% topic.op_post.message %] </blockquote>
            </div>
         </div>
+
+        [% IF topic.op_post.ref_answers.size %]
+            <div class="refmap">
+                <em class=ref_answer>Answers:</em>
+            [% FOREACH ref_link_id IN topic.op_post.ref_answers %]
+                <a onclick="focustopic.op_post([% ref_link_id %])" data-ref="[% ref_link_id %]" href="#[% ref_link_id %]" class="msg_ref ref_answer">&gt;&gt;[% ref_link_id %]</a>
+            [% END %]
+            </div>
+            [% END %]
+
+
+
            <div class="open_topic"><span class=topic_post>
                    [% IF topic.count_posts >= 4 %][% topic.count_posts %] replies [% END %] [% IF topic.count_pics >= 4 %] and [% topic.count_pics %] images omitted. [% END %] <a target="_blank" href="/[% board.id %]/[% topic.topic_id %]">Click Here</a> to view.</span></div>
       </div>

@@ -4,6 +4,14 @@
             [% IF post.img_path %]
                 <div class="img"> <a target="_blank" href="/img/[% post.img_path %]"> <img src="/img/[% post.pre_img_path %]"> </a> </div>
             [% END %]
-            <blockquote> [% post.message %] </blockquote> 
+            <blockquote> [% post.message %] </blockquote>
+            [% IF post.ref_answers.size %]
+            <div class="refmap">
+                <em class=ref_answer>Answers:</em>
+            [% FOREACH ref_link_id IN post.ref_answers %]
+                <a onclick="focuspost([% ref_link_id %])" data-ref="[% ref_link_id %]" href="#[% ref_link_id %]" class="msg_ref ref_answer">&gt;&gt;[% ref_link_id %]</a>
+            [% END %]
+            </div>
+            [% END %]
     </div> 
 </div>

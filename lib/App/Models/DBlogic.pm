@@ -70,6 +70,7 @@ sub extract_posts {
                   date => $string->date,
           pre_img_path => $string->pre_img_path,
               img_path => $string->img_path,
+           ref_answers => [ sort {$a <=> $b } split(' ', $string->ref_answers) ],
             });
     }
     return \@array_of_hashes;
@@ -134,21 +135,41 @@ sub create_post {
     my $img_path = shift;
     my $pre_img_path = shift;
     my $topic_id = shift;
-    $msg = App::Core::Parser::bbcode($msg);
+    my $ref_list_id_answers;
+    ($msg, $ref_list_id_answers) = App::Core::Parser::bbcode($msg);
     my $request = $db->resultset('Message')->create({
             message => $msg,
             img_path => $img_path,
             pre_img_path => $pre_img_path,
             date => \'NOW()',
             topic_id => $topic_id,
+            ref_answers => '',
         },
         );
     update_topic_date($topic_id);
     update_topic_count($topic_id, $img_path);
-    return $request->{_column_data}->{id}
+    my $post_id = $request->{_column_data}->{id};
+    update_post_ref($ref_list_id_answers, $post_id);
+    return $post_id;
 }
 
+sub update_post_ref {
+    my $ref_list_id_answers = shift;
+    my $post_id = shift;
+    for my $ref_post_id (@{$ref_list_id_answers}){
+        update_post_ref_by_id($ref_post_id, $post_id);
+    }
+}
 
+sub update_post_ref_by_id {
+    my $ref_post_id = shift;
+    my $post_id = shift;
+    my $db = init_schema();
+    my $post = $db->resultset('Message')->find($ref_post_id);
+    $post->update({
+        ref_answers => \"CONCAT($post_id, ' ', ref_answers)",
+    });
+}
 
 sub create_topic {
     my $board = shift;

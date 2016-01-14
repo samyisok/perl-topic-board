@@ -66,7 +66,6 @@ sub get_topic_b {
     my ($board) = @{ $env->{'plack.router.match.args'} };
     my $request = Plack::Request->new($env);
     if ($request->method() eq "POST"){
-        use Data::Dumper;
         my $vars = $request->body_parameters();
         my $uploads = $request->uploads();
         if ($uploads->{'filepic'} and App::Core::File::get_file_info($uploads->{'filepic'})){

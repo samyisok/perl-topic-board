@@ -58,6 +58,11 @@ __PACKAGE__->table("messages");
   is_foreign_key: 1
   is_nullable: 1
 
+=head2 ref_answers
+
+  data_type: 'text'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -77,6 +82,8 @@ __PACKAGE__->add_columns(
   },
   "topic_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "ref_answers",
+  { data_type => "text", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -129,8 +136,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-05 17:55:49
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NITpXW9yMzScYx6bgGuHVg
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-14 17:24:19
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qz/O5xFTZl9bdgkluxolXw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
