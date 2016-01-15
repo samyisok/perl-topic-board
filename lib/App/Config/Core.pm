@@ -22,6 +22,7 @@ sub new {
                          'image/gif' => 'gif',
                         },
            save_prefix => "prew_",
+           username => "Anonymous",
        };
        bless $self, $class;
        return $self;
@@ -68,5 +69,11 @@ sub get_file_type {
     my $self = shift;
     return $self->{file_type};
 }
+
+sub get_username {
+    my $self = shift;
+    return $self->{username};
+}
+
 
 1;

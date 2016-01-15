@@ -71,6 +71,7 @@ sub extract_posts {
           pre_img_path => $string->pre_img_path,
               img_path => $string->img_path,
            ref_answers => [ sort {$a <=> $b } split(' ', $string->ref_answers) ],
+                  name => $string->name,
             });
     }
     return \@array_of_hashes;
@@ -135,6 +136,9 @@ sub create_post {
     my $img_path = shift;
     my $pre_img_path = shift;
     my $topic_id = shift;
+    my $username = shift;
+    my $config = App::Config::Core->new();
+    $username = $config->get_username() unless $username;
     my $ref_list_id_answers;
     ($msg, $ref_list_id_answers) = App::Core::Parser::bbcode($msg);
     my $request = $db->resultset('Message')->create({
@@ -144,6 +148,7 @@ sub create_post {
             date => \'NOW()',
             topic_id => $topic_id,
             ref_answers => '',
+            name => $username,
         },
         );
     update_topic_date($topic_id);
@@ -215,8 +220,9 @@ sub create_topic_w_posts {
     my $img_path = shift;
     my $pre_img_path = shift;
     my $board = shift;
+    my $username = shift;
     my $topic_id = create_topic($board);
-    my $op_id = create_post($msg, $img_path, $pre_img_path, $topic_id);
+    my $op_id = create_post($msg, $img_path, $pre_img_path, $topic_id, $username);
     update_topic_op_id($topic_id, $op_id);
 
 }

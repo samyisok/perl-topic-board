@@ -25,6 +25,11 @@ div.op_post-wrapper {
     color: green;
 }
 
+.name {
+    font-size: 1.1em;
+    color: green;
+    
+}
 em.ref_answer{
     font-size: 75%;
 }

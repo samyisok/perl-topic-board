@@ -44,7 +44,7 @@ sub get_posts {
           {
               @img_names = App::Core::File::save_file(App::Core::File::get_file_info($uploads->{'filepic'}));
           }
-      App::Models::DBlogic::create_post($vars->{'msg'}, @img_names, $topic_id);
+      App::Models::DBlogic::create_post($vars->{'msg'}, @img_names, $topic_id, $vars->{'name'});
       my $response = Plack::Response->new();
       $response->redirect( "/" . $board . "/" . $topic_id);
       return $response->finalize;
@@ -70,7 +70,7 @@ sub get_topic_b {
         my $uploads = $request->uploads();
         if ($uploads->{'filepic'} and App::Core::File::get_file_info($uploads->{'filepic'})){
             my @img_names = App::Core::File::save_file(App::Core::File::get_file_info($uploads->{'filepic'}));
-            App::Models::DBlogic::create_topic_w_posts($vars->{'msg'}, @img_names, $board);
+            App::Models::DBlogic::create_topic_w_posts($vars->{'msg'}, @img_names, $board, $vars->{'name'});
             my $response = Plack::Response->new();
             $response->redirect("/" . $board);
             return $response->finalize;

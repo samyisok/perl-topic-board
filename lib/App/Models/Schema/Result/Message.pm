@@ -63,6 +63,12 @@ __PACKAGE__->table("messages");
   data_type: 'text'
   is_nullable: 1
 
+=head2 name
+
+  data_type: 'char'
+  is_nullable: 1
+  size: 11
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -84,6 +90,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "ref_answers",
   { data_type => "text", is_nullable => 1 },
+  "name",
+  { data_type => "char", is_nullable => 1, size => 11 },
 );
 
 =head1 PRIMARY KEY
@@ -136,8 +144,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-14 17:24:19
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qz/O5xFTZl9bdgkluxolXw
+# Created by DBIx::Class::Schema::Loader v0.07043 @ 2016-01-15 18:18:52
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TbvAdTVfRqGbWKrFXWoprg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
