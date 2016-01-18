@@ -78,6 +78,24 @@ sub extract_posts {
 
 }
 
+
+
+sub get_user_by_hash {
+    my $username = shift;
+    my $pass_hash = shift;
+    my $db = init_schema();
+    my $result = $db->resultset('User')->single({ username => $username, password => $pass_hash});
+    my $string = $result; 
+    return { 
+                username => $string->username,
+                email => $string->email,
+                role => $string->role,
+                token_session => $string->token_session,
+            } if $string;
+}
+
+
+
 sub get_topics {
     my $db = init_schema();
     my $dest = shift;
@@ -128,6 +146,17 @@ sub update_topic_date {
     my $topic_post = $db->resultset('Topic')->find($topic_id);
     $topic_post->date(\'NOW()');
     $topic_post->update;
+}
+
+sub update_user_token {
+    my $username = shift;
+    my $new_token = shift;
+    my $time = shift;
+    my $db = init_schema();
+    my $user = $db->resultset('User')->find({username => $username});
+    $user->token_session($new_token);
+    $user->login_time($time) if $time;
+    $user->update;
 }
 
 sub create_post {

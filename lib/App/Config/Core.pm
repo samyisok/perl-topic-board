@@ -23,6 +23,7 @@ sub new {
                         },
            save_prefix => "prew_",
            username => "Anonymous",
+           secret_key => "asjdoijaswqeiouqwoieowu834ws",
        };
        bless $self, $class;
        return $self;
@@ -43,6 +44,10 @@ sub db_pref {
     return $self->{dbpref};
 }
 
+sub get_secret {
+    my $self = shift;
+    return $self->{secret_key};
+}
 
 sub get_tpldir {
     my $self = shift;

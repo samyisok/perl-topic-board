@@ -12,6 +12,7 @@ use App::Core::Render;
 use App::Core::File;
 use Plack::App::Path::Router::PSGI;
 use Path::Router;
+use App::Core::Auth;
 use utf8;
 
 BEGIN {
@@ -21,10 +22,24 @@ BEGIN {
     $router->add_route('/:board' => target => \&get_topic_b );
     $router->add_route('/err' => target => \&get_error );
     $router->add_route('/' => target => \&get_main_page );
+    $router->add_route('/auth' => target => \&get_auth );
+    $router->add_route('/signout' => target => \&get_signout );
 }
 
 sub get_index{
        return App::Models::DBlogic::get_list_topics();
+}
+
+sub get_signout{
+       my $env = shift;
+       my $request = Plack::Request->new($env);
+       my $cookies_data = App::Core::Auth::unpack_data($request->cookies->{'session_data'});
+       my ($username) = @{$cookies_data};
+       my $response = Plack::Response->new();
+       $response->redirect("/auth");
+       $response->cookies->{'session_data'} = {value => undef};
+       App::Models::DBlogic::update_user_token($username, "");
+       $response->finalize;
 }
 
 sub get_main_page {
@@ -59,6 +74,45 @@ sub get_posts {
 
 sub get_error {
     return App::Core::Render::render_template('err.html');
+}
+
+sub get_auth {
+   my $env = shift;
+   my $request = Plack::Request->new($env);
+   my $cookies = $request->cookies();
+   if ($request->method() eq "POST"){
+        my $vars = $request->body_parameters();
+        use Data::Dumper;
+        print Dumper($vars);
+        my $login = $vars->{'login'};
+        my $pass_hash = App::Core::Auth::generate_sha_hash($vars->{'password'});
+        my $user_data = App::Models::DBlogic::get_user_by_hash($login, $pass_hash);
+        my $login_time = time;
+        if ($user_data) {
+            my $response = Plack::Response->new( '200', 
+                                                [ 'Content-Type' => 'text/html' ],
+                                                [ 'Granted' ],);
+            my $session_token = App::Core::Auth::generate_sha_hash($login . $pass_hash . $login_time);
+            App::Models::DBlogic::update_user_token($login, $session_token, $login_time);
+            my $role = $user_data->{'role'};
+            $response->cookies->{'session_data'} = {
+                                           value => App::Core::Auth::pack_data($login, $role, $session_token, $login_time),
+                                                   };
+            $response->finalize();
+        }
+        else {
+            return get_error();
+        }
+    }
+    else{
+            my $cookies_data = App::Core::Auth::unpack_data($cookies->{'session_data'});
+            use Data::Dumper;
+            print Dumper(\$cookies_data);
+            return App::Core::Render::render_template('auth.html', {
+                    cookies => $cookies_data,
+                    });
+    }
+
 }
 
 sub get_topic_b {

@@ -1,0 +1,14 @@
+[% title = 'Hello ANANANIMAAS' %]
+[% INCLUDE header.html %]
+<div class='loginform'>
+[% UNLESS cookies.size >= 1 %]
+[%cookies.size%]
+<form id="authform" action="/auth" method="POST" enctype="multipart/form-data">
+            <div><input type="TEXT" name="login"></div>
+            <div><input type="PASSWORD" name="password"></div>
+            <div><button>Sign in</button></div>
+</form>
+[% ELSE %]
+<a href=/signout > Sign Out </a>
+[% END %]
+</div>
