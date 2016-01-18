@@ -80,14 +80,15 @@ sub extract_posts {
 
 
 
-sub get_user_by_hash {
+sub get_user {
     my $username = shift;
     my $pass_hash = shift;
     my $db = init_schema();
-    my $result = $db->resultset('User')->single({ username => $username, password => $pass_hash});
+    my $result = $db->resultset('User')->single({ username => $username});
     my $string = $result; 
     return { 
                 username => $string->username,
+                password_hash => $string->password,
                 email => $string->email,
                 role => $string->role,
                 token_session => $string->token_session,
@@ -281,8 +282,37 @@ sub get_list_topics {
     return \@sorted_result_array;
 }
 
+sub find_posts_with_this_pic {
+    my $pic_path = shift;
+    my $db = init_schema();
+    my $post_id_list = $db->resultset('Message')->search(
+        { img_path => $pic_path},
+        { columns => [qw/ id /],}
+        );
+    my @array_of_id;
+    for my $string ($post_id_list){
+        push(@array_of_id, $string->id);
+    }
+    return \@array_of_id;
+}
+
+sub delete_all_posts_with_pic {
+
+}
 
 
+sub delete_post {
+    my $post_id = shift;
+    my $db = init_schema();
+    my $post = $db->resultset('Message')->find({id => $post_id});
+    $post->update({topic_id => \'NULL'});
+    $post->delete;
+
+}
+
+sub delete_thread {
+
+}
 
 
 1;

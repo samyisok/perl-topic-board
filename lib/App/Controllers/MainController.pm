@@ -24,6 +24,7 @@ BEGIN {
     $router->add_route('/' => target => \&get_main_page );
     $router->add_route('/auth' => target => \&get_auth );
     $router->add_route('/signout' => target => \&get_signout );
+    $router->add_route('/delpost/:post_id' => target => \&delpost );
 }
 
 sub get_index{
@@ -50,6 +51,8 @@ sub get_posts {
    my $env = shift;
    my ($board,$topic_id) = @{ $env->{'plack.router.match.args'} };
    my $request = Plack::Request->new($env);
+   my $cookies = $request->cookies;
+   my $cookies_data = App::Core::Auth::unpack_data($cookies->{'session_data'});
    if ($request->method() eq "POST"){
       use Data::Dumper;
       my $vars = $request->body_parameters();
@@ -68,7 +71,8 @@ sub get_posts {
    else {
        my $result = App::Models::DBlogic::get_posts($topic_id);
        return get_error unless @{$result};
-       return App::Core::Render::render_template('posts.html', {posts => $result, topic_id => $topic_id, board => $board, index=>get_index()});
+       return App::Core::Render::render_template('posts.html', {posts => $result, topic_id => $topic_id, board => $board, index=>get_index(),
+                                                                cookies => $cookies_data});
    }
 }
 
@@ -86,9 +90,9 @@ sub get_auth {
         print Dumper($vars);
         my $login = $vars->{'login'};
         my $pass_hash = App::Core::Auth::generate_sha_hash($vars->{'password'});
-        my $user_data = App::Models::DBlogic::get_user_by_hash($login, $pass_hash);
+        my $user_data = App::Models::DBlogic::get_user($login);
         my $login_time = time;
-        if ($user_data) {
+        if ($user_data->{'password_hash'} eq $pass_hash) {
             my $response = Plack::Response->new( '200', 
                                                 [ 'Content-Type' => 'text/html' ],
                                                 [ 'Granted' ],);
@@ -113,6 +117,37 @@ sub get_auth {
                     });
     }
 
+}
+
+sub delpost {
+    my $env = shift;
+    my ($post_id) = @{ $env->{'plack.router.match.args'} };
+    my $return_url = $env->{'HTTP_REFERER'};
+    my $request = Plack::Request->new($env);
+    my $cookies = $request->cookies;
+    my $cookies_data = App::Core::Auth::unpack_data($cookies->{'session_data'});
+    my $login = $cookies_data->[0];
+    my $session_token = $cookies_data->[2];
+    my $user_data = App::Models::DBlogic::get_user($login);
+    my $input_hash = $user_data->{'login'} . $user_data->{'password_hash'} . $user_data->{'login_time'};
+    my $session_token_from_db = App::Core::Auth::generate_sha_hash($input_hash);
+    if ($session_token eq $session_token_from_db){
+        print $session_token . "\n";
+        print $session_token_from_db . "\n";
+        App::Models::DBlogic::delete_post($post_id);
+        redirect($return_url);
+    }
+    else {
+        return get_error();
+    }
+}
+
+
+sub redirect {
+    my $url = shift;
+    my $response = Plack::Response->new();
+    $response->redirect($url);
+    return $response->finalize;
 }
 
 sub get_topic_b {
